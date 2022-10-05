@@ -47,29 +47,35 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        relativeLayout = findViewById(R.id.activity_main);
-
-        recyclerViewHorizontal = findViewById(R.id.horizontal_recycler_view);
-        recyclerViewVertical = findViewById(R.id.vertical_recycler_view);
+       init();
         recyclerViewHorizontal.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
         recyclerViewVertical.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
-
-        progressBar = findViewById(R.id.progressBar);
 
         popularList = Collections.emptyList();
         dataList = Collections.emptyList();
         apiInterface = RetrofitApiClient.getClient().create(ApiInterface.class);
 
-        if (NetworkCheckingClass.isNetworkAvailable(this)) {
+       check_Network();
+
+    }
+
+    
+    private void init() {
+         relativeLayout = findViewById(R.id.activity_main);
+        recyclerViewHorizontal = findViewById(R.id.horizontal_recycler_view);
+        recyclerViewVertical = findViewById(R.id.vertical_recycler_view);
+         progressBar = findViewById(R.id.progressBar);
+    }
+    public void check_Network(){
+            if (NetworkCheckingClass.isNetworkAvailable(this)) {
             progressBar.setVisibility(View.VISIBLE);
             fetchData();
         } else {
             progressBar.setVisibility(View.GONE);
             Toast.makeText(this, "No internet Connection", Toast.LENGTH_LONG).show();
         }
-
     }
-
+    
     private void fetchData() {
 
         Call<JsonData> call = apiInterface.apiCall();
